@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Dictionary Construction - cytms</title>
+  <meta name="author" content="cytms">
+
+  
+  <meta name="description" content="於是我成了紅豆控，開始思索以上這個問題該如何解決 Polydice 使用 Elasticsearch + Tire 作為搜尋引擎。原本套用mmseg 的 plugin，但似乎斷詞以 unigram 為主，以至於搜尋紅豆會找成紅燒豆腐。 * 計算n-gram的詞頻(term frequency) &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cytms.github.com/blog/2013/08/24/week-many-at-polydice">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="cytms" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+
+<meta property="fb:app_id" content="335693093197303" />
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">cytms</a></h1>
+  
+    <h2>溫故而知新</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:cytms.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/categories">Categories</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Dictionary Construction</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-24T01:09:00+08:00" pubdate data-updated="true">Aug 24<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/images/2013-08-24-01.png">
+於是我成了紅豆控，開始思索以上這個問題該如何解決</p>
+
+<!--More-->
+
+
+<p>Polydice 使用 Elasticsearch + Tire 作為搜尋引擎。原本套用mmseg 的 plugin，但似乎斷詞以 unigram 為主，以至於搜尋<strong>紅豆</strong>會找成<strong>紅</strong>燒<strong>豆</strong>腐。</p>
+
+
+<p>*</p>
+
+
+<h3>計算n-gram的詞頻(term frequency)</h3>
+
+
+<p>
+n-gram指得是以n個字為單位做斷字，如：「抹茶冰淇淋很好吃」依照bi-gram做斷字會被斷成「抹茶」、「茶冰」、「冰淇」、「淇淋」、「淋很」、「很好」、「好吃」，我們可以發現有幾個字是有意義的，像是「抹茶」和「好吃」。依照中文字的特性，我們通常會取bi-gram和tri-gram為主，但此次分析的文集(corpus)為中文食譜，考量到食譜可能會有four-gram，如：「無鹽奶油」、「低筋麵粉」等，因此我依序將文集做four-gram、tri-gram、bi-gram和uni-gram斷字處理並計算出詞頻。
+</p>
+
+
+<p>*</p>
+
+
+<h3>選取詞頻門檻(threshold)並過濾無意義的文字(stop-words)</h3>
+
+
+<p>依據Zipf’s Law，我們可以知道字的排名與詞頻指數成反比，且排名特別高和特別低的可能為較不顯著、無代表性的文字，如：「與」、「和」的詞頻特別高卻沒有特殊含意，「Parmesan」(一種起司)就只有出現一次代表說可能大多數使用者不會輸入或知悉這項材料。因此，此步驟主要就是要過濾這些較不顯著的文字，留下大多數有意義的文字來供使用者搜尋之用。一開始設的門檻分別為從four-gram到uni-gram分別設10、15、20和90，取出的文字看起來是有意義的但會遇到一個問題：在bi-gram的步驟中，同時留下「巧克」和「克力」兩個字，但其實這應該屬於tri-gram中的「巧克力」，因此我多了一個判斷式：若n-gram中包含於(n+1)-gram的詞且兩者詞頻相近的話及過濾掉n-gram的字詞。又因為要考量到(n+1)-gram，所以我取到five-gram以方便進行篩選。最後，為了提高本詞庫的精確度，我將門檻全設為2，也就是說：刪除僅出現一次的字。</br>
+[<a href="https://gist.github.com/cytms/5907566#file-dictionary">選詞結果</a> | <a href="https://gist.github.com/cytms/5907566#file-dictionary_index">詞庫索引</a>]
+</p>
+
+
+<p>*</p>
+
+
+<h3>將食譜依詞庫標籤並建立反索引(inverted index)</h3>
+
+
+<p>詞庫建立完成後，將每一比食譜與詞庫中的字詞進行比對，有出現的及給予標籤，並記錄該字詞出現在哪些食譜之中，以加速未來搜尋之用。
+[<a href="https://gist.github.com/cytms/5907566#file-inverted_file">反索引</a>]
+</p>
+
+
+<p><img src="/images/2013-08-24-02.png"></p>
+
+<p>把plugins 改成 ik 並套用該詞庫後，效果明顯改善許多。</p>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">cytms</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-24T01:09:00+08:00" pubdate data-updated="true">Aug 24<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/polydice/'>polydice</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/04/08/week-five-at-polydice/" title="Previous Post: Simple Search Function">&laquo; Simple Search Function</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/12/02/mmai-proposal/" title="Next Post: mmai proposal">mmai proposal &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+
+  <section>
+    <h1>Comments</h1>
+    <div id="facebook_comments" aria-live="polite">
+      <noscript>Please enable JavaScript to view the comments powered by facebook</a></noscript>
+<div
+  class="fb-comments"
+  data-href="http://cytms.github.com/blog/2013/08/24/week-many-at-polydice/"
+  data-num-posts="2"
+  data-width="600"
+  data-colorscheme="light" ></div>
+    </div>
+  </section>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/04/28/ensemble/">Ensemble</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/04/22/pointer-network/">Pointer Network</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/18/la-musique/">la musique</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/12/chinese-nlp-by-ner/">Chinese NLP by NER (java)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/20/going-to-ieseg/">going to IÉSEG</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - cytms -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=335693093197303&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

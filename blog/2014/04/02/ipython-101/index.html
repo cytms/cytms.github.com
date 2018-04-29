@@ -1,0 +1,361 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>iPython 101 - cytms</title>
+  <meta name="author" content="cytms">
+
+  
+  <meta name="description" content="有一天 Richard 開始好奇愛料理資料庫有著怎樣看不到的祕密，於是我就開始使用 iPython 將資料庫中的資料視覺化呈現出來。 如何安裝 iPython? (from Richard) 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cytms.github.com/blog/2014/04/02/ipython-101">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="cytms" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+
+<meta property="fb:app_id" content="335693093197303" />
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">cytms</a></h1>
+  
+    <h2>溫故而知新</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:cytms.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/categories">Categories</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">iPython 101</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-02T23:03:00+08:00" pubdate data-updated="true">Apr 2<span>nd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>有一天 Richard 開始好奇愛料理資料庫有著怎樣看不到的祕密，於是我就開始使用 iPython 將資料庫中的資料視覺化呈現出來。</p>
+
+<!--more-->
+
+
+<ul>
+<li><h4>如何安裝 iPython? (from Richard)</h4></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># set up some taps and update brew
+</span><span class='line'>brew tap homebrew/science # a lot of cool formulae for scientific tools
+</span><span class='line'>brew tap samueljohn/python # numpy, scipy
+</span><span class='line'>brew update && brew upgrade
+</span><span class='line'>
+</span><span class='line'># install a brewed python
+</span><span class='line'>brew install python
+</span><span class='line'>
+</span><span class='line'># install openblas (otherwise scipy's arpack tests will fail)
+</span><span class='line'>brew install openblas
+</span><span class='line'>
+</span><span class='line'># install PIL, imagemagick, graphviz and other
+</span><span class='line'># image generating stuff (qt is nice for viewing)
+</span><span class='line'>brew install pillow imagemagick graphviz
+</span><span class='line'>brew install cairo --without-x
+</span><span class='line'>brew install py2cairo # this will ask you to download xquartz and install it
+</span><span class='line'>brew install qt pyqt
+</span><span class='line'>
+</span><span class='line'># install nose (unittests & doctests on steroids)
+</span><span class='line'>pip install virtualenv nose
+</span><span class='line'>
+</span><span class='line'># install numpy and scipy
+</span><span class='line'>brew install numpy --with-openblas
+</span><span class='line'>brew install scipy --with-openblas
+</span><span class='line'>
+</span><span class='line'># some cool python libs (if you don't know them, look them up)
+</span><span class='line'># time series stuff, natural language toolkit
+</span><span class='line'># generate plots, symbolic maths in python, fancy debugging output
+</span><span class='line'>pip install pandas nltk matplotlib sympy q
+</span><span class='line'>
+</span><span class='line'># ipython and notebook support
+</span><span class='line'>brew install zmq
+</span><span class='line'>pip install ipython</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><h4>如何開啟你的 notebook?</h4>
+
+<p>直接在你的資料夾下 <code>ipython notebook</code> 即可。</p></li>
+<li><h4>如何 push 上 heroku?</h4></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone https://github.com/ipython/nbviewer.git
+</span><span class='line'>cd nbviewer
+</span><span class='line'>./heroku-bootstrap [repository_name]
+</span><span class='line'>
+</span><span class='line'>heroku addons:add memcachier:dev
+</span><span class='line'>heroku addons:add newrelic:wayne</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">cytms</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-02T23:03:00+08:00" pubdate data-updated="true">Apr 2<span>nd</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/python/'>Python</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/25/system-analysis/" title="Previous Post: System Analysis">&laquo; System Analysis</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/05/19/elasticsearch-101/" title="Next Post: elasticsearch 101">elasticsearch 101 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+
+  <section>
+    <h1>Comments</h1>
+    <div id="facebook_comments" aria-live="polite">
+      <noscript>Please enable JavaScript to view the comments powered by facebook</a></noscript>
+<div
+  class="fb-comments"
+  data-href="http://cytms.github.com/blog/2014/04/02/ipython-101/"
+  data-num-posts="2"
+  data-width="600"
+  data-colorscheme="light" ></div>
+    </div>
+  </section>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/04/28/ensemble/">Ensemble</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/04/22/pointer-network/">Pointer Network</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/18/la-musique/">la musique</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/12/chinese-nlp-by-ner/">Chinese NLP by NER (java)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/20/going-to-ieseg/">going to IÉSEG</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - cytms -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=335693093197303&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

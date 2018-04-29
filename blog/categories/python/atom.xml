@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Python | cytms]]></title>
+  <link href="http://cytms.github.com/blog/categories/python/atom.xml" rel="self"/>
+  <link href="http://cytms.github.com/"/>
+  <updated>2018-04-29T08:57:33+08:00</updated>
+  <id>http://cytms.github.com/</id>
+  <author>
+    <name><![CDATA[cytms]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[iPython 101]]></title>
+    <link href="http://cytms.github.com/blog/2014/04/02/ipython-101/"/>
+    <updated>2014-04-02T23:03:00+08:00</updated>
+    <id>http://cytms.github.com/blog/2014/04/02/ipython-101</id>
+    <content type="html"><![CDATA[<p>有一天 Richard 開始好奇愛料理資料庫有著怎樣看不到的祕密，於是我就開始使用 iPython 將資料庫中的資料視覺化呈現出來。</p>
+
+<!--more-->
+
+
+<ul>
+<li><h4>如何安裝 iPython? (from Richard)</h4></li>
+</ul>
+
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>set up some taps and update brew&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>brew tap homebrew/science # a lot of cool formulae for scientific tools
+</span><span class='line'>brew tap samueljohn/python # numpy, scipy
+</span><span class='line'>brew update &amp;&amp; brew upgrade&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>install a brewed python&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>brew install python&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>install openblas (otherwise scipy's arpack tests will fail)&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>brew install openblas&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>install PIL, imagemagick, graphviz and other&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>image generating stuff (qt is nice for viewing)&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>brew install pillow imagemagick graphviz
+</span><span class='line'>brew install cairo --without-x
+</span><span class='line'>brew install py2cairo # this will ask you to download xquartz and install it
+</span><span class='line'>brew install qt pyqt&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>install nose (unittests &amp; doctests on steroids)&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>pip install virtualenv nose&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>install numpy and scipy&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>brew install numpy --with-openblas
+</span><span class='line'>brew install scipy --with-openblas&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>some cool python libs (if you don't know them, look them up)&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>time series stuff, natural language toolkit&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>generate plots, symbolic maths in python, fancy debugging output&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>pip install pandas nltk matplotlib sympy q&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>ipython and notebook support&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>brew install zmq
+</span><span class='line'>pip install ipython</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<ul>
+<li><h4>如何開啟你的 notebook?</h4>
+
+<p>直接在你的資料夾下 <code>ipython notebook</code> 即可。</p></li>
+<li><h4>如何 push 上 heroku?</h4>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone https://github.com/ipython/nbviewer.git
+</span><span class='line'>cd nbviewer
+</span><span class='line'>./heroku-bootstrap [repository_name]&lt;/p>&lt;/li>
+</span><span class='line'>&lt;/ul>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;p>heroku addons:add memcachier:dev
+</span><span class='line'>heroku addons:add newrelic:wayne</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Text | cytms]]></title>
+  <link href="http://cytms.github.com/blog/categories/text/atom.xml" rel="self"/>
+  <link href="http://cytms.github.com/"/>
+  <updated>2018-04-29T08:57:33+08:00</updated>
+  <id>http://cytms.github.com/</id>
+  <author>
+    <name><![CDATA[cytms]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Chinese NLP by NER (java)]]></title>
+    <link href="http://cytms.github.com/blog/2015/03/12/chinese-nlp-by-ner/"/>
+    <updated>2015-03-12T11:45:00+08:00</updated>
+    <id>http://cytms.github.com/blog/2015/03/12/chinese-nlp-by-ner</id>
+    <content type="html"><![CDATA[<p><a href="http://nlp.stanford.edu/software/CRF-NER.shtml">[NER]</a> 是 stanford 所提供的一個 Natural Language Processing 套件，現在就讓歪踢帶你快速上手他的 API 。</p>
+
+<!--More-->
+
+
+<p>中文跟英文不一樣，字字相連在一起，所以你要使用NER以前，必須先對你的input做segmentation。而 stanford 就提供了他們自己的斷字 API - <a href="http://nlp.stanford.edu/software/segmenter.shtml">Stanford Word Segmenter</a>，你只要下載檔案、加 jar 檔到你的project中就可以輕鬆斷字。</p>
+
+<p>接下來就是範例程式：
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import edu.stanford.nlp.ie.AbstractSequenceClassifier;
+</span><span class='line'>import edu.stanford.nlp.ling.CoreLabel;
+</span><span class='line'>import edu.stanford.nlp.ling.CoreAnnotations;
+</span><span class='line'>import edu.stanford.nlp.util.StringUtils;
+</span><span class='line'>import edu.stanford.nlp.util.Triple;
+</span><span class='line'>import java.io.PrintStream;
+</span><span class='line'>import java.io.UnsupportedEncodingException;
+</span><span class='line'>import java.util.List;
+</span><span class='line'>import java.util.Properties;&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>import edu.stanford.nlp.ie.crf.CRFClassifier;&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>public class NERDemo {&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>private static final String basedir = 
+</span><span class='line'>    System.getProperty("SegDemo", "stanford-segmenter-2015-01-30/data");
+</span><span class='line'>
+</span><span class='line'>public static void main(String[] args) throws Exception {
+</span><span class='line'>
+</span><span class='line'>    String serializedClassifier = 
+</span><span class='line'>            "stanford-ner-2015-01-30/classifiers/chinese.misc.distsim.crf.ser.gz";
+</span><span class='line'>
+</span><span class='line'>    AbstractSequenceClassifier&lt;CoreLabel&gt; classifier = 
+</span><span class='line'>            CRFClassifier.getClassifier(serializedClassifier);
+</span><span class='line'>
+</span><span class='line'>    String sample = "徐佳青表示，思慮不週造成這樣的結果，非她本意，也因有愧發言人職責，昨天即辭發言人以示負責。" +
+</span><span class='line'>            "希望不要因這個事件，讓社會更值得被討論的重要事情失焦。她會深切虛心反省，也會秉持初衷，堅持信仰價值。" + 
+</span><span class='line'>            "感謝各位關心與指教。";
+</span><span class='line'>
+</span><span class='line'>    String fileContents = getSeg(sample);
+</span><span class='line'>    System.out.println(fileContents);
+</span><span class='line'>
+</span><span class='line'>    List&lt;List&lt;CoreLabel&gt;&gt; out = classifier.classify(fileContents);
+</span><span class='line'>    System.out.println(out);
+</span><span class='line'>    for (List&lt;CoreLabel&gt; sentence : out) {
+</span><span class='line'>        for (CoreLabel word : sentence) {
+</span><span class='line'>            System.out.print(word.word() + '/'
+</span><span class='line'>                    + word.get(CoreAnnotations.AnswerAnnotation.class)
+</span><span class='line'>                    + ' ');
+</span><span class='line'>        }
+</span><span class='line'>        System.out.println();
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>private static String getSeg(String sample) {
+</span><span class='line'>    try {
+</span><span class='line'>        System.setOut(new PrintStream(System.out, true, "utf-8"));
+</span><span class='line'>    } catch (UnsupportedEncodingException e) {
+</span><span class='line'>        e.printStackTrace();
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    Properties props = new Properties();
+</span><span class='line'>    props.setProperty("sighanCorporaDict", basedir);
+</span><span class='line'>    // below is needed because CTBSegDocumentIteratorFactory accesses it
+</span><span class='line'>    props.setProperty("serDictionary", basedir + "/dict-chris6.ser.gz");
+</span><span class='line'>    props.setProperty("inputEncoding", "UTF-8");
+</span><span class='line'>    props.setProperty("sighanPostProcessing", "true");
+</span><span class='line'>
+</span><span class='line'>    CRFClassifier&lt;CoreLabel&gt; segmenter = new CRFClassifier&lt;CoreLabel&gt;(props);
+</span><span class='line'>    segmenter.loadClassifierNoExceptions(basedir + "/ctb.gz", props);
+</span><span class='line'>
+</span><span class='line'>    // ZHConverter converter = ZHConverter.getInstance(ZHConverter.SIMPLIFIED);
+</span><span class='line'>    // ZHConverter.getInstance(ZHConverter.SIMPLIFIED);
+</span><span class='line'>    // sample = converter.convert(sample);
+</span><span class='line'>    List&lt;String&gt; segmented = segmenter.segmentString(sample);
+</span><span class='line'>    System.out.println(StringUtils.join(segmented));
+</span><span class='line'>    return StringUtils.join(segmented);
+</span><span class='line'>}
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>}&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><code>word.get(CoreAnnotations.AnswerAnnotation.class)</code>取得的就是該詞彙的屬性。有鑑於此標註系統是由簡體中文 train 出來的，各位大大如果不嫌棄的話可以先將繁體字使用<a href="https://code.google.com/p/java-zhconverter/">[ZHConverter]</a>轉乘簡體中文，再來使用此系統，performance 說不定會好一些些。</p>
+]]></content>
+  </entry>
+  
+</feed>

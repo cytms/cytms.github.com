@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Structural Coding Style - cytms</title>
+  <meta name="author" content="cytms">
+
+  
+  <meta name="description" content="愚人節快樂～ DRY & CoC 流行不能跟，潮流不能擋。目前程式設計師面臨了兩大潮流：Don&#8217;t Repeat Your Code (DRY) 和 Convention over configuration (CoC)。而 Ruby on Rails &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cytms.github.com/blog/2013/04/01/week-four-at-polydice">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="cytms" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+
+<meta property="fb:app_id" content="335693093197303" />
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">cytms</a></h1>
+  
+    <h2>溫故而知新</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:cytms.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/categories">Categories</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Structural Coding Style</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-01T11:08:00+08:00" pubdate data-updated="true">Apr 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>愚人節快樂～</p>
+
+<!-- More -->
+
+
+
+
+<h3>DRY & CoC</h3>
+
+
+<p>流行不能跟，潮流不能擋。目前程式設計師面臨了兩大潮流：Don&#8217;t Repeat Your Code (DRY) 和 Convention over configuration (CoC)。而 Ruby on Rails 即為運用兩大潮流到極致的語言及網頁框架。雖然我嘴巴常說好懶得寫程式，但殊不知自己寫出來的程式多的嚇死人，完全忽視了這股潮流，沉浸在繁雜的程式架構上，常常不知不覺讓費了很多時間與精神在修改及維護網站上。<br />
+oop老師常常說『程式設計是展開性的』，你常常先寫一個大架構再慢慢的填寫裡面的小物件，你可以以物件的形式一直增加的你的程式。以這次實作為例，我可能會需要使用到資料表的evaluation來分析以字串形式儲存的Hash或Array，此時就可以在model中多加一個method</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def eval_info
+</span><span class='line'>  return eval(self.info)
+</span><span class='line'>enf</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如此就可以將分析的過程包裝起來，一來可以減少eval(app.info)的寫法散佈在網站的各個角落外，還可以達到information hiding的特性，避免可能發生的安全問題。</p>
+
+<h3>ujs</h3>
+
+
+<p>為了避免HTML, CSS, Javascript混雜在一起而產生網站維護上的問題，Unobtrusive JavaScript (ujs) 被廣為推廣。身為一個 programmer newbie，常常會把Javascript的function嵌進HTML像這樣</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;div class="btn" onclick="hello();">&lt;/div></span></code></pre></td></tr></table></div></figure>
+
+
+<p>點選這個div就會call function hello()，未來如果改了hello()的參數或function名稱，就要回頭找HTML我哪裡呼叫了hello()，找到最後頭昏昏眼花花還製造了一推蟲子而令人不勝其擾。使用ujs，你就可以設定在頁面開始時，哪些物件會bind哪些事件，範例如下：</p>
+
+<figure class='code'><figcaption><span>index.html </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;hello_button&quot;</span> <span class="na">class=</span><span class="s">&quot;btn&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>index.js </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;hello_button&#39;</span><span class="p">).</span><span class="nx">onClick</span> <span class="o">=</span> <span class="nx">hello</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如此一來你就可以直接在js檔中修改你要binding的物件和事件，避免蒐集散落一地的code的困擾。</p>
+
+<h3>IA與UX</h3>
+
+
+<p>Information Architecture (IA)是一套設計方法，主要是規劃如何組織及標籤資料(organizing &amp; labeling data)，使訊息可以被有效的傳輸，讓使用者擁有美好的使用經驗。以我的理解而言，就是要假設自己是個使用者，想想我會希望使用怎樣的產品、會喜歡怎樣的設計。這似乎又與User Expeirence(UX)的經營環環相扣且息息相關，日前聽了系上畢業的學長介紹台積電中的企業系統整合處(BSID)，其主要開發電子化商務、合作平台、商業智慧、CRM 和 SRM 等與使用者有直接關係的商品，此部門就非常強調UX，除了系統最基本的需求-正確性外，該部門也很重視簡單、快速、直覺的設計介面，希望提供更好的使用者體驗。</p>
+
+<h3>小結</h3>
+
+
+<p>洋洋灑灑的得知許多舉足輕重的概念，但無法落實也是枉然。期許自己未來在架設系統時也可以慢條斯理、有條不紊的撰寫每一行程式，將自己的構想以結構化且物件導向的方式呈現在使用者面前，使系統更加容易維護，同時也節省不必要的資源浪費。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">cytms</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-01T11:08:00+08:00" pubdate data-updated="true">Apr 1<span>st</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/polydice/'>polydice</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/03/24/week-three-at-polydice/" title="Previous Post: About Front-end">&laquo; About Front-end</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/04/08/week-five-at-polydice/" title="Next Post: Simple Search Function">Simple Search Function &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+
+  <section>
+    <h1>Comments</h1>
+    <div id="facebook_comments" aria-live="polite">
+      <noscript>Please enable JavaScript to view the comments powered by facebook</a></noscript>
+<div
+  class="fb-comments"
+  data-href="http://cytms.github.com/blog/2013/04/01/week-four-at-polydice/"
+  data-num-posts="2"
+  data-width="600"
+  data-colorscheme="light" ></div>
+    </div>
+  </section>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/04/28/ensemble/">Ensemble</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/04/22/pointer-network/">Pointer Network</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/18/la-musique/">la musique</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/12/chinese-nlp-by-ner/">Chinese NLP by NER (java)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/20/going-to-ieseg/">going to IÉSEG</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - cytms -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=335693093197303&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

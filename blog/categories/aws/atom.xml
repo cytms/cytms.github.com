@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: AWS | cytms]]></title>
+  <link href="http://cytms.github.com/blog/categories/aws/atom.xml" rel="self"/>
+  <link href="http://cytms.github.com/"/>
+  <updated>2018-04-29T08:57:33+08:00</updated>
+  <id>http://cytms.github.com/</id>
+  <author>
+    <name><![CDATA[cytms]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[elasticsearch 101]]></title>
+    <link href="http://cytms.github.com/blog/2014/05/19/elasticsearch-101/"/>
+    <updated>2014-05-19T23:26:00+08:00</updated>
+    <id>http://cytms.github.com/blog/2014/05/19/elasticsearch-101</id>
+    <content type="html"><![CDATA[<p>如果有安裝 Homebrew 的話直接 <code>brew installation</code> 就可以完成 es 的安裝。</p>
+
+<!-- More -->
+
+
+<h4>首先，先跟大家簡介一下 es 的基本功能及資料</h4>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>設定檔位置，可在該資料夾編輯 yml 檔&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>/usr/local/Cellar/elasticsearch/0.90.2/config&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>打開es引擎並指定 elasticsearch.yml 為 mapping 和 setting 的依據&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>elasticsearch -f -D config/elasticsearch.yml&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>刪掉叫做 recepes 的 index&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>curl -XDELETE 'http://localhost:9200/recipes/'</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>若要把它嵌在 rails 中，則可使用 <a href="https://github.com/karmi/tire">Tire</a> 作為輔助工具。在 rails application 底下可以直接下 <code>rake environment tire:import CLASS='Recipe' FORCE=true</code> 即可建立該 class 的 index。</p>
+
+<p>因為每次建 index 都會花費一小段時間，若單純想要測試可不可以 work 的話可以在 console 內執行 <code>Recipe.index.import Recipe.first(200)</code> 就可以僅建前幾筆的 index 即可。</p>
+
+<h4>如果你要安裝 plugins</h4>
+
+<p>放置 plugin 的資料夾為 <code>/usr/local/var/lib/elasticsearch/plugins/</code>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>進到 elasticsearch 的資料夾中進行安裝&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>bin/plugin -install elasticsearch/elasticsearch-analysis-xxx/1.x.x
+</span><span class='line'>mvn clean package&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>在 target 中會產生出 SNAPSHOT.jar 檔，將該檔案複製到 plugin 的資料夾中即可&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>cp target/elasticsearch-analysis-xxx-1.x.x-SNAPSHOT.jar
+</span><span class='line'> ../plugins/analysis-xxx/elasticsearch-analysis-xxx-1.x.x.jar&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+]]></content>
+  </entry>
+  
+</feed>

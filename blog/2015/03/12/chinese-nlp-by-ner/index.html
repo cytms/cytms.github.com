@@ -1,0 +1,388 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Chinese NLP by NER (java) - cytms</title>
+  <meta name="author" content="cytms">
+
+  
+  <meta name="description" content="[NER] 是 stanford 所提供的一個 Natural Language Processing 套件，現在就讓歪踢帶你快速上手他的 API 。 中文跟英文不一樣，字字相連在一起，所以你要使用NER以前，必須先對你的input做segmentation。而 stanford &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cytms.github.com/blog/2015/03/12/chinese-nlp-by-ner">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="cytms" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+
+<meta property="fb:app_id" content="335693093197303" />
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">cytms</a></h1>
+  
+    <h2>溫故而知新</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:cytms.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/categories">Categories</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Chinese NLP by NER (Java)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-12T11:45:00+08:00" pubdate data-updated="true">Mar 12<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://nlp.stanford.edu/software/CRF-NER.shtml">[NER]</a> 是 stanford 所提供的一個 Natural Language Processing 套件，現在就讓歪踢帶你快速上手他的 API 。</p>
+
+<!--More-->
+
+
+<p>中文跟英文不一樣，字字相連在一起，所以你要使用NER以前，必須先對你的input做segmentation。而 stanford 就提供了他們自己的斷字 API - <a href="http://nlp.stanford.edu/software/segmenter.shtml">Stanford Word Segmenter</a>，你只要下載檔案、加 jar 檔到你的project中就可以輕鬆斷字。</p>
+
+<p>接下來就是範例程式：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import edu.stanford.nlp.ie.AbstractSequenceClassifier;
+</span><span class='line'>import edu.stanford.nlp.ling.CoreLabel;
+</span><span class='line'>import edu.stanford.nlp.ling.CoreAnnotations;
+</span><span class='line'>import edu.stanford.nlp.util.StringUtils;
+</span><span class='line'>import edu.stanford.nlp.util.Triple;
+</span><span class='line'>import java.io.PrintStream;
+</span><span class='line'>import java.io.UnsupportedEncodingException;
+</span><span class='line'>import java.util.List;
+</span><span class='line'>import java.util.Properties;
+</span><span class='line'>
+</span><span class='line'>import edu.stanford.nlp.ie.crf.CRFClassifier;
+</span><span class='line'>
+</span><span class='line'>public class NERDemo {
+</span><span class='line'>  private static final String basedir = 
+</span><span class='line'>      System.getProperty("SegDemo", "stanford-segmenter-2015-01-30/data");
+</span><span class='line'>
+</span><span class='line'>  public static void main(String[] args) throws Exception {
+</span><span class='line'>
+</span><span class='line'>      String serializedClassifier = 
+</span><span class='line'>              "stanford-ner-2015-01-30/classifiers/chinese.misc.distsim.crf.ser.gz";
+</span><span class='line'>
+</span><span class='line'>      AbstractSequenceClassifier&lt;CoreLabel> classifier = 
+</span><span class='line'>              CRFClassifier.getClassifier(serializedClassifier);
+</span><span class='line'>
+</span><span class='line'>      String sample = "徐佳青表示，思慮不週造成這樣的結果，非她本意，也因有愧發言人職責，昨天即辭發言人以示負責。" +
+</span><span class='line'>              "希望不要因這個事件，讓社會更值得被討論的重要事情失焦。她會深切虛心反省，也會秉持初衷，堅持信仰價值。" + 
+</span><span class='line'>              "感謝各位關心與指教。";
+</span><span class='line'>
+</span><span class='line'>      String fileContents = getSeg(sample);
+</span><span class='line'>      System.out.println(fileContents);
+</span><span class='line'>
+</span><span class='line'>      List&lt;List&lt;CoreLabel>> out = classifier.classify(fileContents);
+</span><span class='line'>      System.out.println(out);
+</span><span class='line'>      for (List&lt;CoreLabel> sentence : out) {
+</span><span class='line'>          for (CoreLabel word : sentence) {
+</span><span class='line'>              System.out.print(word.word() + '/'
+</span><span class='line'>                      + word.get(CoreAnnotations.AnswerAnnotation.class)
+</span><span class='line'>                      + ' ');
+</span><span class='line'>          }
+</span><span class='line'>          System.out.println();
+</span><span class='line'>      }
+</span><span class='line'>  }
+</span><span class='line'>
+</span><span class='line'>  private static String getSeg(String sample) {
+</span><span class='line'>      try {
+</span><span class='line'>          System.setOut(new PrintStream(System.out, true, "utf-8"));
+</span><span class='line'>      } catch (UnsupportedEncodingException e) {
+</span><span class='line'>          e.printStackTrace();
+</span><span class='line'>      }
+</span><span class='line'>
+</span><span class='line'>      Properties props = new Properties();
+</span><span class='line'>      props.setProperty("sighanCorporaDict", basedir);
+</span><span class='line'>      // below is needed because CTBSegDocumentIteratorFactory accesses it
+</span><span class='line'>      props.setProperty("serDictionary", basedir + "/dict-chris6.ser.gz");
+</span><span class='line'>      props.setProperty("inputEncoding", "UTF-8");
+</span><span class='line'>      props.setProperty("sighanPostProcessing", "true");
+</span><span class='line'>
+</span><span class='line'>      CRFClassifier&lt;CoreLabel> segmenter = new CRFClassifier&lt;CoreLabel>(props);
+</span><span class='line'>      segmenter.loadClassifierNoExceptions(basedir + "/ctb.gz", props);
+</span><span class='line'>
+</span><span class='line'>      // ZHConverter converter = ZHConverter.getInstance(ZHConverter.SIMPLIFIED);
+</span><span class='line'>      // ZHConverter.getInstance(ZHConverter.SIMPLIFIED);
+</span><span class='line'>      // sample = converter.convert(sample);
+</span><span class='line'>      List&lt;String> segmented = segmenter.segmentString(sample);
+</span><span class='line'>      System.out.println(StringUtils.join(segmented));
+</span><span class='line'>      return StringUtils.join(segmented);
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>word.get(CoreAnnotations.AnswerAnnotation.class)</code>取得的就是該詞彙的屬性。有鑑於此標註系統是由簡體中文 train 出來的，各位大大如果不嫌棄的話可以先將繁體字使用<a href="https://code.google.com/p/java-zhconverter/">[ZHConverter]</a>轉乘簡體中文，再來使用此系統，performance 說不定會好一些些。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">cytms</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-12T11:45:00+08:00" pubdate data-updated="true">Mar 12<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/mining/'>Mining</a>, <a class='category' href='/blog/categories/text/'>Text</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/01/20/going-to-ieseg/" title="Previous Post: going to IÉSEG">&laquo; going to IÉSEG</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/03/18/la-musique/" title="Next Post: la musique">la musique &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+
+  <section>
+    <h1>Comments</h1>
+    <div id="facebook_comments" aria-live="polite">
+      <noscript>Please enable JavaScript to view the comments powered by facebook</a></noscript>
+<div
+  class="fb-comments"
+  data-href="http://cytms.github.com/blog/2015/03/12/chinese-nlp-by-ner/"
+  data-num-posts="2"
+  data-width="600"
+  data-colorscheme="light" ></div>
+    </div>
+  </section>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/04/28/ensemble/">Ensemble</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/04/22/pointer-network/">Pointer Network</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/18/la-musique/">la musique</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/12/chinese-nlp-by-ner/">Chinese NLP by NER (java)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/20/going-to-ieseg/">going to IÉSEG</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - cytms -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=335693093197303&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

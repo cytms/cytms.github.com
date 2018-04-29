@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>elasticsearch 101 - cytms</title>
+  <meta name="author" content="cytms">
+
+  
+  <meta name="description" content="如果有安裝 Homebrew 的話直接 brew installation 就可以完成 es 的安裝。 首先，先跟大家簡介一下 es 的基本功能及資料 1
+2
+3
+4
+5
+6
+7
+8
+# 設定檔位置，可在該資料夾編輯 yml 檔
+/usr/local/Cellar/elasticsearch/0. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cytms.github.com/blog/2014/05/19/elasticsearch-101">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="cytms" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+
+<meta property="fb:app_id" content="335693093197303" />
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">cytms</a></h1>
+  
+    <h2>溫故而知新</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:cytms.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/categories">Categories</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Elasticsearch 101</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-19T23:26:00+08:00" pubdate data-updated="true">May 19<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>如果有安裝 Homebrew 的話直接 <code>brew installation</code> 就可以完成 es 的安裝。</p>
+
+<!-- More -->
+
+
+<h4>首先，先跟大家簡介一下 es 的基本功能及資料</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># 設定檔位置，可在該資料夾編輯 yml 檔
+</span><span class='line'>/usr/local/Cellar/elasticsearch/0.90.2/config
+</span><span class='line'>
+</span><span class='line'># 打開es引擎並指定 elasticsearch.yml 為 mapping 和 setting 的依據
+</span><span class='line'>elasticsearch -f -D config/elasticsearch.yml
+</span><span class='line'>
+</span><span class='line'># 刪掉叫做 recepes 的 index
+</span><span class='line'>curl -XDELETE 'http://localhost:9200/recipes/'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>若要把它嵌在 rails 中，則可使用 <a href="https://github.com/karmi/tire">Tire</a> 作為輔助工具。在 rails application 底下可以直接下 <code>rake environment tire:import CLASS='Recipe' FORCE=true</code> 即可建立該 class 的 index。</p>
+
+<p>因為每次建 index 都會花費一小段時間，若單純想要測試可不可以 work 的話可以在 console 內執行 <code>Recipe.index.import Recipe.first(200)</code> 就可以僅建前幾筆的 index 即可。</p>
+
+<h4>如果你要安裝 plugins</h4>
+
+<p>放置 plugin 的資料夾為 <code>/usr/local/var/lib/elasticsearch/plugins/</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># 進到 elasticsearch 的資料夾中進行安裝
+</span><span class='line'>bin/plugin -install elasticsearch/elasticsearch-analysis-xxx/1.x.x
+</span><span class='line'>mvn clean package
+</span><span class='line'>
+</span><span class='line'># 在 target 中會產生出 SNAPSHOT.jar 檔，將該檔案複製到 plugin 的資料夾中即可
+</span><span class='line'>cp target/elasticsearch-analysis-xxx-1.x.x-SNAPSHOT.jar
+</span><span class='line'> ../plugins/analysis-xxx/elasticsearch-analysis-xxx-1.x.x.jar</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">cytms</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-19T23:26:00+08:00" pubdate data-updated="true">May 19<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/aws/'>AWS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/04/02/ipython-101/" title="Previous Post: iPython 101">&laquo; iPython 101</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/01/20/going-to-ieseg/" title="Next Post: going to IÉSEG">going to IÉSEG &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+
+  <section>
+    <h1>Comments</h1>
+    <div id="facebook_comments" aria-live="polite">
+      <noscript>Please enable JavaScript to view the comments powered by facebook</a></noscript>
+<div
+  class="fb-comments"
+  data-href="http://cytms.github.com/blog/2014/05/19/elasticsearch-101/"
+  data-num-posts="2"
+  data-width="600"
+  data-colorscheme="light" ></div>
+    </div>
+  </section>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/04/28/ensemble/">Ensemble</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/04/22/pointer-network/">Pointer Network</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/18/la-musique/">la musique</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/12/chinese-nlp-by-ner/">Chinese NLP by NER (java)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/20/going-to-ieseg/">going to IÉSEG</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - cytms -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=335693093197303&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

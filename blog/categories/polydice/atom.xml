@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: polydice | cytms]]></title>
+  <link href="http://cytms.github.com/blog/categories/polydice/atom.xml" rel="self"/>
+  <link href="http://cytms.github.com/"/>
+  <updated>2018-04-29T08:57:33+08:00</updated>
+  <id>http://cytms.github.com/</id>
+  <author>
+    <name><![CDATA[cytms]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Dictionary Construction]]></title>
+    <link href="http://cytms.github.com/blog/2013/08/24/week-many-at-polydice/"/>
+    <updated>2013-08-24T01:09:00+08:00</updated>
+    <id>http://cytms.github.com/blog/2013/08/24/week-many-at-polydice</id>
+    <content type="html"><![CDATA[<p><img src="/images/2013-08-24-01.png">
+於是我成了紅豆控，開始思索以上這個問題該如何解決</p>
+
+<!--More-->
+
+
+<p>Polydice 使用 Elasticsearch + Tire 作為搜尋引擎。原本套用mmseg 的 plugin，但似乎斷詞以 unigram 為主，以至於搜尋<strong>紅豆</strong>會找成<strong>紅</strong>燒<strong>豆</strong>腐。</p>
+
+
+<p>*</p>
+
+
+<h3>計算n-gram的詞頻(term frequency)</h3>
+
+
+<p>
+n-gram指得是以n個字為單位做斷字，如：「抹茶冰淇淋很好吃」依照bi-gram做斷字會被斷成「抹茶」、「茶冰」、「冰淇」、「淇淋」、「淋很」、「很好」、「好吃」，我們可以發現有幾個字是有意義的，像是「抹茶」和「好吃」。依照中文字的特性，我們通常會取bi-gram和tri-gram為主，但此次分析的文集(corpus)為中文食譜，考量到食譜可能會有four-gram，如：「無鹽奶油」、「低筋麵粉」等，因此我依序將文集做four-gram、tri-gram、bi-gram和uni-gram斷字處理並計算出詞頻。
+</p>
+
+
+<p>*</p>
+
+
+<h3>選取詞頻門檻(threshold)並過濾無意義的文字(stop-words)</h3>
+
+
+<p>依據Zipf’s Law，我們可以知道字的排名與詞頻指數成反比，且排名特別高和特別低的可能為較不顯著、無代表性的文字，如：「與」、「和」的詞頻特別高卻沒有特殊含意，「Parmesan」(一種起司)就只有出現一次代表說可能大多數使用者不會輸入或知悉這項材料。因此，此步驟主要就是要過濾這些較不顯著的文字，留下大多數有意義的文字來供使用者搜尋之用。一開始設的門檻分別為從four-gram到uni-gram分別設10、15、20和90，取出的文字看起來是有意義的但會遇到一個問題：在bi-gram的步驟中，同時留下「巧克」和「克力」兩個字，但其實這應該屬於tri-gram中的「巧克力」，因此我多了一個判斷式：若n-gram中包含於(n+1)-gram的詞且兩者詞頻相近的話及過濾掉n-gram的字詞。又因為要考量到(n+1)-gram，所以我取到five-gram以方便進行篩選。最後，為了提高本詞庫的精確度，我將門檻全設為2，也就是說：刪除僅出現一次的字。</br>
+[<a href="https://gist.github.com/cytms/5907566#file-dictionary">選詞結果</a> | <a href="https://gist.github.com/cytms/5907566#file-dictionary_index">詞庫索引</a>]
+</p>
+
+
+<p>*</p>
+
+
+<h3>將食譜依詞庫標籤並建立反索引(inverted index)</h3>
+
+
+<p>詞庫建立完成後，將每一比食譜與詞庫中的字詞進行比對，有出現的及給予標籤，並記錄該字詞出現在哪些食譜之中，以加速未來搜尋之用。
+[<a href="https://gist.github.com/cytms/5907566#file-inverted_file">反索引</a>]
+</p>
+
+
+<p><img src="/images/2013-08-24-02.png"></p>
+
+<p>把plugins 改成 ik 並套用該詞庫後，效果明顯改善許多。</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Simple Search Function]]></title>
+    <link href="http://cytms.github.com/blog/2013/04/08/week-five-at-polydice/"/>
+    <updated>2013-04-08T21:34:00+08:00</updated>
+    <id>http://cytms.github.com/blog/2013/04/08/week-five-at-polydice</id>
+    <content type="html"><![CDATA[<p><img src="/images/2013-04-08-01.png">
+就這樣多了一個search</p>
+
+<!--more-->
+
+
+<p>這週主要就是按圖索驥style，但還是記錄一下作為進度回報表。主要是完成search功能，擷取使用者下的關鍵字外，還會搜尋graph api 相關的app，如果使用者覺得應該把它加入排名名單中，可以點選藍藍的按鈕，它如果很厲害就會在管理員確認後顯示在top 10中。</p>
+
+<br/>
+
+
+<p><img src="/images/2013-04-08-03.png">
+撈資料庫的資料外，還會找找看相關的fb application<br/></p>
+
+<p><img src="/images/2013-04-08-04.png">
+loader轉呀轉呀就會跑出fb application的資料<br/></p>
+
+<p><img src="/images/2013-04-08-02.png">
+然後將bootstrap lightbox與highchart喇在一起，可以post到使用者的塗鴉牆上。對對對，還自作多情的加了一個fb login讓nav bar感覺沒有那麼空曠，也可以讓使用者隨心所欲的使用post功能ˊ_>ˋ</p>
+
+<p>以上。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Structural Coding Style]]></title>
+    <link href="http://cytms.github.com/blog/2013/04/01/week-four-at-polydice/"/>
+    <updated>2013-04-01T11:08:00+08:00</updated>
+    <id>http://cytms.github.com/blog/2013/04/01/week-four-at-polydice</id>
+    <content type="html"><![CDATA[<p>愚人節快樂～</p>
+
+<!-- More -->
+
+
+
+
+<h3>DRY & CoC</h3>
+
+
+<p>流行不能跟，潮流不能擋。目前程式設計師面臨了兩大潮流：Don't Repeat Your Code (DRY) 和 Convention over configuration (CoC)。而 Ruby on Rails 即為運用兩大潮流到極致的語言及網頁框架。雖然我嘴巴常說好懶得寫程式，但殊不知自己寫出來的程式多的嚇死人，完全忽視了這股潮流，沉浸在繁雜的程式架構上，常常不知不覺讓費了很多時間與精神在修改及維護網站上。<br />
+oop老師常常說『程式設計是展開性的』，你常常先寫一個大架構再慢慢的填寫裡面的小物件，你可以以物件的形式一直增加的你的程式。以這次實作為例，我可能會需要使用到資料表的evaluation來分析以字串形式儲存的Hash或Array，此時就可以在model中多加一個method</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def eval_info&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>return eval(self.info)
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>enf</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>如此就可以將分析的過程包裝起來，一來可以減少eval(app.info)的寫法散佈在網站的各個角落外，還可以達到information hiding的特性，避免可能發生的安全問題。</p>
+
+<h3>ujs</h3>
+
+
+<p>為了避免HTML, CSS, Javascript混雜在一起而產生網站維護上的問題，Unobtrusive JavaScript (ujs) 被廣為推廣。身為一個 programmer newbie，常常會把Javascript的function嵌進HTML像這樣
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;div class="btn" onclick="hello();">&lt;/div>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div>
+點選這個div就會call function hello()，未來如果改了hello()的參數或function名稱，就要回頭找HTML我哪裡呼叫了hello()，找到最後頭昏昏眼花花還製造了一推蟲子而令人不勝其擾。使用ujs，你就可以設定在頁面開始時，哪些物件會bind哪些事件，範例如下：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>index.html </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;hello_button&quot;</span> <span class="na">class=</span><span class="s">&quot;btn&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>index.js </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;hello_button&#39;</span><span class="p">).</span><span class="nx">onClick</span> <span class="o">=</span> <span class="nx">hello</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+如此一來你就可以直接在js檔中修改你要binding的物件和事件，避免蒐集散落一地的code的困擾。</p>
+
+<h3>IA與UX</h3>
+
+
+<p>Information Architecture (IA)是一套設計方法，主要是規劃如何組織及標籤資料(organizing &amp; labeling data)，使訊息可以被有效的傳輸，讓使用者擁有美好的使用經驗。以我的理解而言，就是要假設自己是個使用者，想想我會希望使用怎樣的產品、會喜歡怎樣的設計。這似乎又與User Expeirence(UX)的經營環環相扣且息息相關，日前聽了系上畢業的學長介紹台積電中的企業系統整合處(BSID)，其主要開發電子化商務、合作平台、商業智慧、CRM 和 SRM 等與使用者有直接關係的商品，此部門就非常強調UX，除了系統最基本的需求-正確性外，該部門也很重視簡單、快速、直覺的設計介面，希望提供更好的使用者體驗。</p>
+
+<h3>小結</h3>
+
+
+<p>洋洋灑灑的得知許多舉足輕重的概念，但無法落實也是枉然。期許自己未來在架設系統時也可以慢條斯理、有條不紊的撰寫每一行程式，將自己的構想以結構化且物件導向的方式呈現在使用者面前，使系統更加容易維護，同時也節省不必要的資源浪費。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[About Front-end]]></title>
+    <link href="http://cytms.github.com/blog/2013/03/24/week-three-at-polydice/"/>
+    <updated>2013-03-24T18:50:00+08:00</updated>
+    <id>http://cytms.github.com/blog/2013/03/24/week-three-at-polydice</id>
+    <content type="html"><![CDATA[<p><img src="/images/view-one.png">
+scss, less, css 傻傻分不清楚</p>
+
+<!--more-->
+
+
+<p>與勞倫司先生確認好網頁架構後，感覺寫出比較像樣的東西了<br/>
+這禮拜正著手為它鋪上表皮。</p>
+
+<p>這次我選用以bootstrap為基礎開發的<a href="https://github.com/TalksLab/metro-bootstrap">metro</a>作為template。
+bootstrap因為包裝了Jquery-ui及css template，讓許多開發者愛不釋手，並開發出各式各樣的客製化樣板。<a href="https://github.com/thomas-mcdonald/bootstrap-sass">這裡</a>有個方便的套件可以讓新手更快速的掌握bootstrap，只要更改bootstap.scss即可瞬產生出你想要的樣板。<br/></p>
+
+<p>boostrap metro是talkslab仿造windows 8的樣式開發而成的套件，其雖然很華麗，但他在less檔中有些參數沒有設好以至於在套用時會出現一些小問題，因此我將它的css轉成scss，如此你可以比較方便的修改他們的共同參數。</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sass-convert --from css --to scss [CSS_FILE] > [SCSS_FILE]</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>再來你會遇到一個問題：icon路徑的對應。<br/>
+首先不要慌張，找到你的config/application.rb
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>config.assets.paths &lt;&lt; Rails.root.join("app", "assets", "[FOLDER]")</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>我的解決方法是將scss檔改附檔名變成scss.erb檔，在相對應的路徑改成</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;%= asset_path('[FILE_NAME]') + '?#iefix' %></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>如此它就會自動尋找app/assets/[FOLDER]中叫[FILE_NAME]的檔案，此法可以快又有效解決你路徑上的疑難雜症。</p>
+
+<h4>目前我遇到了兩個問題：</h4>
+
+
+<p>1) 切頁問題，因為使用<code> redirect :back </code>使我在管理者頁按delete時都會使頁面重洗一次跳到最上方。想到的解決方式為使用ajax執行delete，並將同頁的該欄位隱藏起來以避免一直洗刷頁面。<br/>
+<img src="/images/view-three.png"><br/>
+按完delete後會跑到第一個tab的頁面：s<br/>
+<img src="/images/view-two.png"></p>
+
+<p>2) 使用者頁面計算量大，因為在view中進行排名計算，使頁面有點累隔，想到的解決方法有兩個：其一為儲存排名狀態於db中，其二是請worker每日更新時儲存排名狀態於global value之中讓每個使用者都可以共享它。<br/></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MVC Notes]]></title>
+    <link href="http://cytms.github.com/blog/2013/03/17/week-two-at-polydice/"/>
+    <updated>2013-03-17T22:59:00+08:00</updated>
+    <id>http://cytms.github.com/blog/2013/03/17/week-two-at-polydice</id>
+    <content type="html"><![CDATA[<p><img src="/images/2013-03-17.jpg">
+萬事起頭難</p>
+
+<!--more-->
+
+
+
+
+<h3>Model</h3>
+
+
+<p>資料表存放的地方。任何關於欄位的限制（如：不可重複等）都規定在此。延續上一週[我在做什麼]，我的Model應只有一個來存放App的資料，再用<a href="https://github.com/pluginaweek/state_machine">state-machine</a>來控制每筆App的狀態，以下為我的sample code：
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>model/app.rb </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">state_machine</span> <span class="ss">:initial</span> <span class="o">=&gt;</span> <span class="ss">:waiting</span>  <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;# 起初先宣告一開始的狀態為waiting，此外還有checked和deleted兩種狀態</span>
+</span><span class='line'><span class="sr">state :checked</span>
+</span><span class='line'><span class="sr">state :deleted</span>
+</span><span class='line'><span class="sr"># 再來說明每種狀態會經做什麼動作變成其他狀態</span>
+</span><span class='line'><span class="sr">event :delete do </span>
+</span><span class='line'><span class="sr">    transition [:waiting, :checked] =&amp;gt; :deleted</span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'><span class="sr"># ...</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>如此一來你可以執行該transition來更改你的狀態
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>app.delete!
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Controller</h3>
+
+
+<p>對資料表執行某些動作的地方。基本的動作像是新增、讀取、更改、刪除(CRUD)都會被定義於controller中。有種設計風格叫做RESTful，它幫助我們用一種比較標準化的方式來命名跟組織controllers和actions，應盡量使用以降低controller的負擔。如果有重複使用的action應使用善加利用繼承概念以便未來網站維護之用。
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails g controller admin/apps</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>在admin資料夾中新增一個base_controller.rb
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>base_controller.rb </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Admin</span><span class="o">::</span><span class="no">BaseController</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ApplicationController</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;before_filter :authenticate_user! # devise中的使用者驗證method</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>然後再將admin/apps controller繼承base controller
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Admin::AppsController &lt; Admin::BaseController</span></code></pre></td></tr></table></div></figure></notextile></div>
+透過物件導向的繼承概念，可以將避免重複的程式撰寫，方便未來網站管理。</p>
+
+<h3>View</h3>
+
+
+<p>如果使用RESTful的設計風格，再設計表單時你可以直接設定method即可透過http完成對model的操作。
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;%= link_to 'delete', app_path(app), :method => :delete %></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Devise</h3>
+
+
+<p>一個註冊、登出登錄、更改密碼等多功能使用者管理套件，它可以讓你安全的存取使用者資訊，完善的api讓功能們隨call隨到。</p>
+
+<h3>Workers</h3>
+
+
+<p>幫助你定時完成某項任務。本網站需要每日定時更新資料庫中的資料才可以確保排名是即時的，因此可使用<a href="https://github.com/yzalis/Crontab">crobtab</a>實現你的願望。若待處理事件需要queue來控管的話，可考慮使用<a href="https://github.com/defunkt/resque">resque</a>和<a href="https://github.com/mperham/sidekiq">sidekiq</a></p>
+
+<p>說的落落長卻少了成品，我會督促我自己在星期三前都摸摸看 <br/>
+重點只是想要說：有規劃的專案就像是有目標的船隻，船長才知道駛往何方 <br/></p>
+
+<p><blockquote><p>我們在開的船越來越大艘，有時候自己都覺得自己無力駕駛，很難想像有一天如果是開航空母艦，一次要跟上百個人合作的時候要怎麼辦？<br/>從最簡化的狀況，就是需要充足的規劃，無論是一個人、兩個人或是十個人、數十個人的專案，應該都是如此。</p><footer><strong>iCook創辦人-Lawrence</strong></footer></blockquote></p>
+]]></content>
+  </entry>
+  
+</feed>

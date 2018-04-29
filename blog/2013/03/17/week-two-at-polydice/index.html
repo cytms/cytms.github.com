@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>MVC Notes - cytms</title>
+  <meta name="author" content="cytms">
+
+  
+  <meta name="description" content="萬事起頭難 Model 資料表存放的地方。任何關於欄位的限制（如：不可重複等）都規定在此。延續上一週[我在做什麼]，我的Model應只有一個來存放App的資料，再用state-machine來控制每筆App的狀態，以下為我的sample code： model/app.rb 1
+2
+3
+4
+5 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cytms.github.com/blog/2013/03/17/week-two-at-polydice">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="cytms" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+
+<meta property="fb:app_id" content="335693093197303" />
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">cytms</a></h1>
+  
+    <h2>溫故而知新</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:cytms.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/categories">Categories</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">MVC Notes</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-17T22:59:00+08:00" pubdate data-updated="true">Mar 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/images/2013-03-17.jpg">
+萬事起頭難</p>
+
+<!--more-->
+
+
+
+
+<h3>Model</h3>
+
+
+<p>資料表存放的地方。任何關於欄位的限制（如：不可重複等）都規定在此。延續上一週[我在做什麼]，我的Model應只有一個來存放App的資料，再用<a href="https://github.com/pluginaweek/state_machine">state-machine</a>來控制每筆App的狀態，以下為我的sample code：</p>
+
+<figure class='code'><figcaption><span>model/app.rb </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">state_machine</span> <span class="ss">:initial</span> <span class="o">=&gt;</span> <span class="ss">:waiting</span>  <span class="k">do</span>
+</span><span class='line'>  <span class="c1"># 起初先宣告一開始的狀態為waiting，此外還有checked和deleted兩種狀態</span>
+</span><span class='line'>  <span class="n">state</span> <span class="ss">:checked</span>
+</span><span class='line'>  <span class="n">state</span> <span class="ss">:deleted</span>
+</span><span class='line'>  <span class="c1"># 再來說明每種狀態會經做什麼動作變成其他狀態</span>
+</span><span class='line'>  <span class="n">event</span> <span class="ss">:delete</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">transition</span> <span class="o">[</span><span class="ss">:waiting</span><span class="p">,</span> <span class="ss">:checked</span><span class="o">]</span> <span class="o">=&gt;</span> <span class="ss">:deleted</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如此一來你可以執行該transition來更改你的狀態</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>app.delete!</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<h3>Controller</h3>
+
+
+<p>對資料表執行某些動作的地方。基本的動作像是新增、讀取、更改、刪除(CRUD)都會被定義於controller中。有種設計風格叫做RESTful，它幫助我們用一種比較標準化的方式來命名跟組織controllers和actions，應盡量使用以降低controller的負擔。如果有重複使用的action應使用善加利用繼承概念以便未來網站維護之用。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails g controller admin/apps</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在admin資料夾中新增一個base_controller.rb</p>
+
+<figure class='code'><figcaption><span>base_controller.rb </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Admin</span><span class="o">::</span><span class="no">BaseController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>  <span class="n">before_filter</span> <span class="ss">:authenticate_user!</span> <span class="c1"># devise中的使用者驗證method</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然後再將admin/apps controller繼承base controller</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Admin::AppsController &lt; Admin::BaseController</span></code></pre></td></tr></table></div></figure>
+
+
+<p>透過物件導向的繼承概念，可以將避免重複的程式撰寫，方便未來網站管理。</p>
+
+<h3>View</h3>
+
+
+<p>如果使用RESTful的設計風格，再設計表單時你可以直接設定method即可透過http完成對model的操作。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;%= link_to 'delete', app_path(app), :method => :delete %></span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<h3>Devise</h3>
+
+
+<p>一個註冊、登出登錄、更改密碼等多功能使用者管理套件，它可以讓你安全的存取使用者資訊，完善的api讓功能們隨call隨到。</p>
+
+<h3>Workers</h3>
+
+
+<p>幫助你定時完成某項任務。本網站需要每日定時更新資料庫中的資料才可以確保排名是即時的，因此可使用<a href="https://github.com/yzalis/Crontab">crobtab</a>實現你的願望。若待處理事件需要queue來控管的話，可考慮使用<a href="https://github.com/defunkt/resque">resque</a>和<a href="https://github.com/mperham/sidekiq">sidekiq</a></p>
+
+<p>說的落落長卻少了成品，我會督促我自己在星期三前都摸摸看 <br/>
+重點只是想要說：有規劃的專案就像是有目標的船隻，船長才知道駛往何方 <br/></p>
+
+<blockquote><p>我們在開的船越來越大艘，有時候自己都覺得自己無力駕駛，很難想像有一天如果是開航空母艦，一次要跟上百個人合作的時候要怎麼辦？<br/>從最簡化的狀況，就是需要充足的規劃，無論是一個人、兩個人或是十個人、數十個人的專案，應該都是如此。</p><footer><strong>iCook創辦人-Lawrence</strong></footer></blockquote>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">cytms</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-17T22:59:00+08:00" pubdate data-updated="true">Mar 17<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/polydice/'>polydice</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/03/11/week-1-at-polydice/" title="Previous Post: Week One @Polydice">&laquo; Week One @Polydice</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/03/24/week-three-at-polydice/" title="Next Post: About Front-end">About Front-end &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+
+  <section>
+    <h1>Comments</h1>
+    <div id="facebook_comments" aria-live="polite">
+      <noscript>Please enable JavaScript to view the comments powered by facebook</a></noscript>
+<div
+  class="fb-comments"
+  data-href="http://cytms.github.com/blog/2013/03/17/week-two-at-polydice/"
+  data-num-posts="2"
+  data-width="600"
+  data-colorscheme="light" ></div>
+    </div>
+  </section>
+
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/04/28/ensemble/">Ensemble</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/04/22/pointer-network/">Pointer Network</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/18/la-musique/">la musique</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/12/chinese-nlp-by-ner/">Chinese NLP by NER (java)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/20/going-to-ieseg/">going to IÉSEG</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - cytms -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=335693093197303&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: mmai | cytms]]></title>
+  <link href="http://cytms.github.com/blog/categories/mmai/atom.xml" rel="self"/>
+  <link href="http://cytms.github.com/"/>
+  <updated>2018-04-29T08:57:33+08:00</updated>
+  <id>http://cytms.github.com/</id>
+  <author>
+    <name><![CDATA[cytms]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[System Analysis]]></title>
+    <link href="http://cytms.github.com/blog/2013/12/25/system-analysis/"/>
+    <updated>2013-12-25T14:13:00+08:00</updated>
+    <id>http://cytms.github.com/blog/2013/12/25/system-analysis</id>
+    <content type="html"><![CDATA[<p><img src="/images/2013-12-25-1413/sa.png">
+以上是我們的iGotIt系統架構圖</p>
+
+<!--More-->
+
+
+<h3>Group Members</h3>
+
+
+<p>張竣貿、張宗浩、張宇婷</p>
+
+
+
+
+<h3>Project Title</h3>
+
+
+<p>iGotIt – 商店招牌辨識系統</p>
+
+
+
+
+<h3>Project Description</h3>
+
+
+<p>常常走到某家店看起來很好吃的店門口都會猶豫要不要進去試試看，這時如果只要照張像，就可以找到相關評價一定可以幫助我們判斷他有沒有雷。因此我們決定實作行動裝置APP讓使用者可隨處拍攝照片，並透過手機端進行影像處理，將特徵點(features)傳遞到後台與資料庫中的資料進行比對，在回傳相關文件以利使用者辨知悉店家的評價。</p>
+
+
+
+
+<h3>Related Work</h3>
+
+
+<ul>
+    <li><a href="http://www.cs.ucf.edu/courses/cap6411/cap6411/spring2006/Lecture11.pdf">Graph cut</a></li>
+    <li><a href="http://www.cs.umd.edu/~djacobs/pubs_files/deformations_iccv.pdf">Deformation Invariant Image Matching</a></li>
+    <li><a href="http://ieeexplore.ieee.org/xpl/login.jsp?reload=true&tp=&arnumber=5665875&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D5665875">Le Festin: Shop sign recognition assisted food recommendation system</a></li>
+</ul>
+
+
+
+
+<h3>Possible Working Item</h3>
+
+
+<p>目前我們從兩個方向著手進行：後台資料的處理與前台行動裝置APP的撰寫。</p>
+
+
+<p>後台資料蒐集與處理部分，我們利用Java和OpenCV進行特徵點的萃取。OpenCV為影像處理的強大套件，我們將利用內建的Graph Cut Library找出影像的重點部位，再使用Color Histogram和Gabor Filter進行計算，並將處理解果輸出到線上資料庫(Parse)，以利使用者即時的比對。</p>
+
+
+<p>行動裝置APP的開發，主要目的為讓使用者可以隨時隨地的拍攝照片，而拍攝玩的照片可以即時的使用OpenCV for mobile 進行特徵點的計算，將計算結果回傳至Parse以加速比對的效率。</p>
+
+
+<p>系統使用流程圖如下所示：</p>
+
+
+<p><img src="/images/2013-12-25-1413/flow.png"></p>
+
+<h3>Job Assignment</h3>
+
+
+<table>
+<tr><th>組員名稱</th><th>工作內容</th></tr>
+<tr>
+    <td>張竣貿</td>
+    <td>
+        蒐集資料    12/13<br />
+        線上伺服器架設   12/30<br />
+        利用OpenCV進行影像處理並萃取特徵點    1/3<br />
+    </td>
+</tr>
+<tr>
+    <td>張宗浩</td>
+    <td>
+        蒐集資料    12/13
+        利用OpenCV進行影像處理並萃取特徵點    1/3
+    </td>
+</tr>
+<tr>
+    <td>張宇婷</td>
+    <td>
+        撰寫手機拍攝功能並萃取特徵點  12/30
+        資料傳送到線上伺服器  1/3
+    </td>
+</tr>
+</table>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[mmai proposal]]></title>
+    <link href="http://cytms.github.com/blog/2013/12/02/mmai-proposal/"/>
+    <updated>2013-12-02T16:50:00+08:00</updated>
+    <id>http://cytms.github.com/blog/2013/12/02/mmai-proposal</id>
+    <content type="html"><![CDATA[<p>mmai final project ideas</p>
+
+<h2>商店招牌辨識系統</h2>
+
+
+<h3>Motivation</h3>
+
+
+<p>常常走到某家店看起來很好吃的店門口都會猶豫要不要進去試試看，這時如果只要照張像，就可以找到相關評價一定可以幫助我們判斷他有沒有雷。</p>
+
+
+
+
+<h3>Reference:</h3>
+
+
+<ul>
+    <li>
+        <a href="http://www.cs.umd.edu/~djacobs/pubs_files/deformations_iccv.pdf">Deformation Invariant Image Matching </a>
+    </li>
+    <li>
+        <a href="http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=5665875&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D5665875">Le Festin: Shop sign recognition assisted food recommendation system</a>
+    </li>
+</ul>
+
+
+<!--More-->
+
+
+<p></p>
+
+
+<p></p>
+
+
+
+
+<h2>Trend of Fashion</h2>
+
+
+<h3>Motivation</h3>
+
+
+<p>服飾業者常常會透過時尚顧問公司取得目前大眾偏好的顏色、服裝款式來設計下一季得產品。而這些時尚顧問公司往往都是透過民意調查、個服飾銷售狀況來統計並分析未來趨勢，若能透過影像分析（分析FB照片、電影、時尚雜誌等）並預測未來時尚走向，將會為時尚業者帶來更大的效益。</p>
+
+
+<p></p>
+
+
+<p></p>
+
+
+
+
+<h2>見微知著 - 料理照片知食材</h2>
+
+
+<h3>Motivation</h3>
+
+
+<p>拍攝照片，先找類似的料理，再分析可能食材。</p>
+
+
+<p></p>
+
+
+<p></p>
+
+
+
+
+<h2>Where are you? - 場景辨識</h2>
+
+
+<h3>Motivation</h3>
+
+
+<p>想要參加<a href="http://contest.bhuntr.com/tw/Rekognition-Mobile-App-Idea-Competition/details">Rekognition APP 競賽</a>，透過facebook好友照片打卡作training data，方便未來預測你照片的所在地。</p>
+
+
+<p></p>
+
+
+<p></p>
+
+
+
+
+<h2>Emotion Detection</h2>
+
+
+<p>也是想要參加 Rekognition APP 競賽，透過FB有feeling功能探勘人臉情緒。</p>
+
+
+<p></p>
+
+
+<p></p>
+
+
+
+]]></content>
+  </entry>
+  
+</feed>

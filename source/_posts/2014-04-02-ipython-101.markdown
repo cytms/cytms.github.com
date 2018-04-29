@@ -1,0 +1,62 @@
+---
+layout: post
+title: "iPython 101"
+date: 2014-04-02 23:03
+comments: true
+categories: Python
+---
+
+有一天 Richard 開始好奇愛料理資料庫有著怎樣看不到的祕密，於是我就開始使用 iPython 將資料庫中的資料視覺化呈現出來。
+
+<!--more-->
+
+* ####如何安裝 iPython? (from Richard)
+
+{% codeblock %}
+# set up some taps and update brew
+brew tap homebrew/science # a lot of cool formulae for scientific tools
+brew tap samueljohn/python # numpy, scipy
+brew update && brew upgrade
+
+# install a brewed python
+brew install python
+
+# install openblas (otherwise scipy's arpack tests will fail)
+brew install openblas
+
+# install PIL, imagemagick, graphviz and other
+# image generating stuff (qt is nice for viewing)
+brew install pillow imagemagick graphviz
+brew install cairo --without-x
+brew install py2cairo # this will ask you to download xquartz and install it
+brew install qt pyqt
+
+# install nose (unittests & doctests on steroids)
+pip install virtualenv nose
+
+# install numpy and scipy
+brew install numpy --with-openblas
+brew install scipy --with-openblas
+
+# some cool python libs (if you don't know them, look them up)
+# time series stuff, natural language toolkit
+# generate plots, symbolic maths in python, fancy debugging output
+pip install pandas nltk matplotlib sympy q
+
+# ipython and notebook support
+brew install zmq
+pip install ipython
+{% endcodeblock %}
+
+* #### 如何開啟你的 notebook?
+直接在你的資料夾下 `ipython notebook` 即可。
+
+* #### 如何 push 上 heroku?
+{% codeblock %}
+git clone https://github.com/ipython/nbviewer.git
+cd nbviewer
+./heroku-bootstrap [repository_name]
+
+heroku addons:add memcachier:dev
+heroku addons:add newrelic:wayne
+{% endcodeblock %}

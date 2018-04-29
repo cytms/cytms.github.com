@@ -1,0 +1,15 @@
+---
+layout: post
+title: "Ensemble"
+date: 2018-04-28 17:36
+comments: true
+categories: 
+---
+
+Ensemble 有兩種方法: Bagging & Boosting
+Bagging 主要是減低 variance (model 太複雜容易 overfit)
+nn 沒有那麼容易 overfit (無法在 training set 上 overfit)
+decision tree 很容易 overfit (只要他想就可以拿到 100% precision)
+random forest: decision tree 做 bagging 的版本
+
+[to be continued..]

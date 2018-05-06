@@ -4,7 +4,7 @@
   <title><![CDATA[cytms]]></title>
   <link href="http://cytms.github.com/atom.xml" rel="self"/>
   <link href="http://cytms.github.com/"/>
-  <updated>2018-04-29T08:57:33+08:00</updated>
+  <updated>2018-05-06T12:35:47+08:00</updated>
   <id>http://cytms.github.com/</id>
   <author>
     <name><![CDATA[cytms]]></name>
@@ -14,15 +14,54 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Conditional Generation]]></title>
+    <link href="http://cytms.github.com/blog/2018/05/01/conditional-generation/"/>
+    <updated>2018-05-01T13:33:00+08:00</updated>
+    <id>http://cytms.github.com/blog/2018/05/01/conditional-generation</id>
+    <content type="html"><![CDATA[<p>可以給 attention 設 regularization</p>
+
+<p>解決一步錯、步步錯的問題
+scheduled sampling
+擲銅板決定要看 model 的 output 還是 reference</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Ensemble]]></title>
     <link href="http://cytms.github.com/blog/2018/04/28/ensemble/"/>
     <updated>2018-04-28T17:36:00+08:00</updated>
     <id>http://cytms.github.com/blog/2018/04/28/ensemble</id>
-    <content type="html"><![CDATA[<p>Ensemble 有兩種方法: Bagging &amp; Boosting
-Bagging 主要是減低 variance (model 太複雜容易 overfit)
-nn 沒有那麼容易 overfit (無法在 training set 上 overfit)
-decision tree 很容易 overfit (只要他想就可以拿到 100% precision)
-random forest: decision tree 做 bagging 的版本</p>
+    <content type="html"><![CDATA[<p>Ensemble 有兩種方法: Bagging &amp; Boosting</p>
+
+<h4>Bagging</h4>
+
+<p>主要是減低 variance (model 太複雜容易 overfit)</p>
+
+<p>nn 沒有那麼容易 overfit (無法在 training set 上 overfit)</p>
+
+<p>decision tree 很容易 overfit (只要他想就可以拿到 100% precision)</p>
+
+<p>random forest: decision tree 做 bagging 的版本</p>
+
+<h5>OOB (Out-Of-Bag)</h5>
+
+<h4>Boosting</h4>
+
+<p>主要是用在比較弱的 model 去 fit 你的 training data</p>
+
+<p>加上 weight (在 training 的時候就會多考慮)</p>
+
+<h5>Adaboost</h5>
+
+<p>error 大的 weight 就要比較大</p>
+
+<h5>Decision Stump</h5>
+
+<p>沒什麼好解釋的</p>
+
+<h5>Gradient Boosting</h5>
+
+<p>跟 Adaboost 87% 像，可以自訂 objective function</p>
 
 <p>[to be continued..]</p>
 ]]></content>

@@ -9,10 +9,10 @@
   <meta name="author" content="cytms">
 
   
-  <meta name="description" content="Ensemble 有兩種方法: Bagging &amp; Boosting
-Bagging 主要是減低 variance (model 太複雜容易 overfit)
-nn 沒有那麼容易 overfit (無法在 training set 上 overfit)
-decision tree 很容易 &hellip;">
+  <meta name="description" content="可以給 attention 設 regularization 解決一步錯、步步錯的問題
+scheduled sampling
+擲銅板決定要看 model 的 output 還是 reference
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +81,46 @@ decision tree 很容易 &hellip;">
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2018/05/01/conditional-generation/">Conditional Generation</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-05-01T13:33:00+08:00" pubdate data-updated="true">May 1<span>st</span>, 2018</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>可以給 attention 設 regularization</p>
+
+<p>解決一步錯、步步錯的問題
+scheduled sampling
+擲銅板決定要看 model 的 output 還是 reference</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2018/04/28/ensemble/">Ensemble</a></h1>
     
     
@@ -104,11 +144,37 @@ decision tree 很容易 &hellip;">
   </header>
 
 
-  <div class="entry-content"><p>Ensemble 有兩種方法: Bagging &amp; Boosting
-Bagging 主要是減低 variance (model 太複雜容易 overfit)
-nn 沒有那麼容易 overfit (無法在 training set 上 overfit)
-decision tree 很容易 overfit (只要他想就可以拿到 100% precision)
-random forest: decision tree 做 bagging 的版本</p>
+  <div class="entry-content"><p>Ensemble 有兩種方法: Bagging &amp; Boosting</p>
+
+<h4>Bagging</h4>
+
+<p>主要是減低 variance (model 太複雜容易 overfit)</p>
+
+<p>nn 沒有那麼容易 overfit (無法在 training set 上 overfit)</p>
+
+<p>decision tree 很容易 overfit (只要他想就可以拿到 100% precision)</p>
+
+<p>random forest: decision tree 做 bagging 的版本</p>
+
+<h5>OOB (Out-Of-Bag)</h5>
+
+<h4>Boosting</h4>
+
+<p>主要是用在比較弱的 model 去 fit 你的 training data</p>
+
+<p>加上 weight (在 training 的時候就會多考慮)</p>
+
+<h5>Adaboost</h5>
+
+<p>error 大的 weight 就要比較大</p>
+
+<h5>Decision Stump</h5>
+
+<p>沒什麼好解釋的</p>
+
+<h5>Gradient Boosting</h5>
+
+<p>跟 Adaboost 87% 像，可以自訂 objective function</p>
 
 <p>[to be continued..]</p>
 </div>
@@ -478,48 +544,6 @@ La Seine, la Seine, la Seine 塞納河 塞納河 塞納河</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/24/week-many-at-polydice/">Dictionary Construction</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-24T01:09:00+08:00" pubdate data-updated="true">Aug 24<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/2013-08-24-01.png">
-於是我成了紅豆控，開始思索以上這個問題該如何解決</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/08/24/week-many-at-polydice/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -535,6 +559,10 @@ La Seine, la Seine, la Seine 塞納河 塞納河 塞納河</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2018/05/01/conditional-generation/">Conditional Generation</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2018/04/28/ensemble/">Ensemble</a>
       </li>
     
@@ -548,10 +576,6 @@ La Seine, la Seine, la Seine 塞納河 塞納河 塞納河</p>
     
       <li class="post">
         <a href="/blog/2015/03/12/chinese-nlp-by-ner/">Chinese NLP by NER (java)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/01/20/going-to-ieseg/">going to IÉSEG</a>
       </li>
     
   </ul>

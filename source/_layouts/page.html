@@ -3,7 +3,11 @@ layout: default
 ---
 
 <div>
+{% if page.date %}
 <article role="article">
+{% else %}
+<article style="padding-top: 0px">
+{% endif %}
   {% if page.title %}
   <header>
     <h1 class="entry-title">{% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}</h1>

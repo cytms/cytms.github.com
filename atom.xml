@@ -4,7 +4,7 @@
   <title><![CDATA[cytms]]></title>
   <link href="http://cytms.github.com/atom.xml" rel="self"/>
   <link href="http://cytms.github.com/"/>
-  <updated>2018-05-06T13:01:27+08:00</updated>
+  <updated>2018-05-06T15:59:18+08:00</updated>
   <id>http://cytms.github.com/</id>
   <author>
     <name><![CDATA[cytms]]></name>
@@ -20,9 +20,18 @@
     <id>http://cytms.github.com/blog/2018/05/01/conditional-generation</id>
     <content type="html"><![CDATA[<p>可以給 attention 設 regularization</p>
 
-<p>解決一步錯、步步錯的問題
-scheduled sampling
-擲銅板決定要看 model 的 output 還是 reference</p>
+<!--More-->
+
+
+<p>解決一步錯、步步錯的問題</p>
+
+<h4>scheduled sampling</h4>
+
+<p>擲銅板決定要看 model 的 output 還是 reference</p>
+
+<h4>beam search</h4>
+
+<p>畫出可能的路徑，找出機率最大的那條路</p>
 ]]></content>
   </entry>
   
@@ -32,6 +41,9 @@ scheduled sampling
     <updated>2018-04-28T17:36:00+08:00</updated>
     <id>http://cytms.github.com/blog/2018/04/28/ensemble</id>
     <content type="html"><![CDATA[<p>Ensemble 有兩種方法: Bagging &amp; Boosting</p>
+
+<!--More-->
+
 
 <h4>Bagging</h4>
 

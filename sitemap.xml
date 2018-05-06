@@ -69,10 +69,6 @@
         <lastmod>2018-05-01T13:56:39+08:00</lastmod>
     </url>
     <url>
-        <loc>http://cytms.github.com/about/</loc>
-        <lastmod>2018-05-06T12:34:49+08:00</lastmod>
-    </url>
-    <url>
         <loc>http://cytms.github.com/blog/archives/</loc>
         <lastmod>2018-05-01T13:56:39+08:00</lastmod>
     </url>
@@ -83,6 +79,10 @@
     <url>
         <loc>http://cytms.github.com/new-page/</loc>
         <lastmod>2018-04-29T08:46:11+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://cytms.github.com/profile/</loc>
+        <lastmod>2018-05-06T12:39:18+08:00</lastmod>
     </url>
     <url>
         <loc>http://cytms.github.com/robots.txt</loc>

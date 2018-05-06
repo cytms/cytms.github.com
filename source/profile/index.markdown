@@ -1,30 +1,18 @@
 ---
 layout: page
-title: "about me"
+title: "profile"
 comments: false
 sharing: true
 footer: false
 ---
 
-## Summary:
+Proficient in Machine Learning and Software Engineering. Retains substantial knowledge and extensive experience of large-scaled data modeling and serving system implementation; using Python (TensorFlow, scikit-learn), Scala, and Spark (mllib) for modeling; Java for serving; Javascript, HTML, CSS, and Ruby on Rails for visualization
 
-Proficient in Machine Learning and Software Engineering. Retains substantial knowledge and extensive experience of large-scaled data modeling and serving system implementation; using Python (tensorflow, scikit), Scala, and Spark (mllib) for modeling; Java for serving; Javascript, HTML, CSS, and Ruby on Rails for visualization
-
-## Education:
-* #### Master of Information Management (Business Intelligence Lab), NTU<br>
-	Courses taken: Statistical Data Analysis for Business and Management (A+), Data Mining (A+), Parallel and Distributed Programming (A), Introduction to Digital Speech Processing (A), Multimedia Analysis and Indexing (A-), Mobile Phone Programming (A+), etc.
-
-* #### Bachelor of Information Management, NTU<br>
-	Courses taken: Introduction to Information Retrieval and Text Mining (A+), Network and Platform Service Programming (A+), Data Structures (A+), Computer Organization and Structure (A+), Operating Systems (A), Database Management (A), Systems Analysis and Design (A), etc.
-
-* #### Cloud Computing Program, Computer Science Information Engineering, NTU<br>
-	Courses taken: Special Topic on Cloud Computing (A+), Cloud Computing Security (A+), etc.
-
-## Experiences:
+## Work and Internship Experiences
 * #### Research Engineer, Yahoo (May 2016 – present)
 	In charge of personalized stream and recommendation module, also some machine learning applications
 
-* #### Intern, Yahoo (July 2014 – Present)
+* #### Intern, Yahoo (July 2014 – Aug 2015)
 	Focused on data analytics and visualization at Yahoo. For instance, inspecting user shopping path and making complicated algorithm and results simple to understand, then presenting the work to managers to support their decision
 
 * #### Intern, Polydice (Feb. 2013 – June 2014)
@@ -33,50 +21,36 @@ Proficient in Machine Learning and Software Engineering. Retains substantial kno
 * #### Intern, Trend Micro (Sep. 2013 – Jan. 2014)
 	Common subgraph of virus behavior mining and visualization
 
-* #### Honors and Awards
-	- XBRL Accounting Software Design – Merit Award (2012)
-	- Innovative Tourism App Development – Honorable Mention (2013)
-	- NTU Business Cloud Computing Service Development – Judges' Award (2013)
-
-## Projects:
-* #### Unified E-Commerce Product Classification
-	Designed a convolutional neural network with better model initialization by exploiting hierarchical information. Applied transfer learning mechanism to cope with few-shot problem on other EC properties. The accuracy is 74% in predicting more than 2000 categories
+## Project Experiences
+* #### Unified E-Commerce Product Classification @Yahoo
+	Designed a Convolutional Neural Network with better model initialization by exploiting hierarchical information. Applied transfer learning mechanism to cope with few-shot problem on other E-Commerce properties, which led to a 74% accuracy in predicting more than 2,000 categories
 
 	{% img /images/oneec.png %}
 
-* #### Personalized Discovery Stream
-	Composed category and network embedding profile for million users in Taiwan. Applied boosting-based model with long-term to near real-time user behavior, profile and item features, extracted by network encoding and bandit algorithm; improved overall 25% of CTR and help users explore more in our platform
+* #### Personalized Discovery Stream @Yahoo
+	Composed category and network embedding profile for millions of users in Taiwan. Applied a boosting-based model with long-term to near real-time user behavior, profile and item features, extracted by network encoding and bandit algorithm. This improved overall 25% of CTR and helps users explore more products in our E-Commerce platform
 
 	{% img /images/stream.png %}
 
-* #### Real Time Serving Item-based Recommender System for HK / TW E-Commerce
-	Built up a recommender model and constructed a real-time serving system. Online CTR is three times greater than initial model, and the average response time is under 20 ms over 300 thousand products
+* #### Real Time Serving Item-based Recommender System for Taiwan and Hong-Kong E-Commerce @Yahoo
+	Built up a recommender model and constructed a real-time serving system. The online CTR is three times greater than the initial model, and the average response time is under 20 ms over 300,000 products
 
 	{% img /images/itemr12n.png %}
 
-* #### Kappa - Text Enrichment Tool
-	Developed our model serving back-end with tensorflow Java API and yahoo parsec framework; the response time of our EC endpoint is less than 30 ms
-
-* #### Real Time Serving Personalized Seller Recommender System
+* #### Real Time Serving Personalized Seller Recommender System @Yahoo
 	Constructed a daily-updated Alternative Least Squares Matrix Factorization model on Spark to recommend sellers to users depending on their view and follow signals
 
 	{% img /images/sellerr12n.png %}
 
-* #### Review Tagging & Ranking
-	Tagged product reviews with predefined labels by CNN-based multi-labeled model and applied heuristic algorithm to have informative opinions rank higher
+* #### Product Review Tagging and Ranking @Yahoo
+	Tagged product comments with predefined labels by multi-label classification model using Convolutional Neural Networks and applied heuristic algorithm to have informative opinions rank higher 
 
 	{% img /images/rnr.png %}
 
-* #### Analysis of User Behavior on News App and Shopping Property @Yahoo (SAS, Pig)
+* #### Analysis of User Behavior on News App and Shopping Property @Yahoo
 	For News App, I found some critical features attracting young users. And for Shopping Property, I analyzed key sessions where they highly possible lose their potential buyers.
 
 	{% img /images/ec-central-app.png %}
-
-* #### Chinese [[Summly]](http://www.summly.com/) System (Java)
-	I support Central Team to build up a Chinese Summly (Auto-Summarization) System. I mainly concentrated on the part of feature extraction.
-
-* #### Model Demonstration and Evaluation Tool Developement (D3.js, RoR, PHP, Objc, etc)	
-	Since Yahoo has various models such as search assistant, image search, recommendation, etc. My work is to integrate those systems to a same platform and visualize them. Besides, I constructed evaluation systems to let editors evaluate and collect user feebacks to improve their models as well.
 
 * #### Analysis of Virus Behavior @Trend Micro (D3.js, RoR)
 	To make virus examiners efficiently figure out which behaviors are the features in each cluster, I applied Likelihood Ratio (a familiar testing method for information retrieval) for feature selection. Furthermore, to help them understand the relationship between each behavior, I used Vector Space Model to find sub-graph of each cluster of virus.
@@ -122,8 +96,17 @@ Proficient in Machine Learning and Software Engineering. Retains substantial kno
 
 	<iframe width="720" height="540" src="//www.youtube.com/embed/NI2UKox1cJg" frameborder="0" allowfullscreen></iframe>
 
+## Education
+* #### Master of Information Management (Business Intelligence Lab), NTU<br>
+	Courses taken: Statistical Data Analysis for Business and Management (A+), Data Mining (A+), Parallel and Distributed Programming (A), Introduction to Digital Speech Processing (A), Multimedia Analysis and Indexing (A-), Mobile Phone Programming (A+), etc.
+
+* #### Bachelor of Information Management, NTU<br>
+	Courses taken: Introduction to Information Retrieval and Text Mining (A+), Network and Platform Service Programming (A+), Data Structures (A+), Computer Organization and Structure (A+), Operating Systems (A), Database Management (A), Systems Analysis and Design (A), etc.
+
+* #### Cloud Computing Program, Computer Science Information Engineering, NTU<br>
+	Courses taken: Special Topic on Cloud Computing (A+), Cloud Computing Security (A+), etc.
 
 ## Contact Information
-* Email: cytmos[at]gmail.com
+* Email: cytms[at]hotmail.com
 * Github: github.com/cytms
 * LinkedIn: [[Yu-Ting Chang]](http://www.linkedin.com/profile/view?id=144533758)

@@ -7,9 +7,33 @@ categories:
 ---
 
 Ensemble 有兩種方法: Bagging & Boosting
-Bagging 主要是減低 variance (model 太複雜容易 overfit)
+
+<!--More-->
+
+####Bagging####
+主要是減低 variance (model 太複雜容易 overfit)
+
 nn 沒有那麼容易 overfit (無法在 training set 上 overfit)
+
 decision tree 很容易 overfit (只要他想就可以拿到 100% precision)
+
 random forest: decision tree 做 bagging 的版本
+
+##### OOB (Out-Of-Bag) #####
+
+#### Boosting ####
+主要是用在比較弱的 model 去 fit 你的 training data
+
+加上 weight (在 training 的時候就會多考慮)
+
+##### Adaboost #####
+error 大的 weight 就要比較大
+
+##### Decision Stump #####
+沒什麼好解釋的
+
+##### Gradient Boosting #####
+跟 Adaboost 87% 像，可以自訂 objective function
+
 
 [to be continued..]
